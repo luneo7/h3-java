@@ -45,6 +45,8 @@ jobs:
 
       - name: Tests
         run: mvn "-Dh3.system.prune=true" "-Dh3.dockcross.only=${{ matrix.dockcross-only }}" -B -V clean test site
+        env:
+          OCI_EXE: docker
 
       - name: Format check for C
         run: git diff --exit-code
@@ -91,6 +93,8 @@ jobs:
 
       - name: Tests
         run: mvn "-Dh3.system.prune=true" "-Dh3.dockcross.tag=${{ matrix.dockcross-tag }}" "-Dh3.dockcross.only=${{ matrix.dockcross-only }}" -B -V clean test
+        env:
+          OCI_EXE: docker
 
   tests-no-docker:
     name: Java (No Docker) ${{ matrix.java-version }} ${{ matrix.os }}
@@ -216,6 +220,7 @@ jobs:
         run: |
           mvn clean test -Dh3.github.artifacts.use=true -Dh3.github.artifacts.by_run=true
         env:
+          OCI_EXE: docker
           GH_TOKEN: ${{ github.token }}
 
   tests-native:
@@ -266,4 +271,5 @@ jobs:
         run: |
           mvn clean verify -Dnative -Dh3.github.artifacts.use=true -Dh3.github.artifacts.by_run=true
         env:
+          OCI_EXE: docker
           GH_TOKEN: ${{ github.token }}
