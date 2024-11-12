@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -596,13 +597,13 @@ public class H3Core {
   /** Create polygons from a set of contiguous indexes */
   public List<List<List<LatLng>>> cellAddressesToMultiPolygon(
       Collection<String> h3Addresses, boolean geoJson) {
-    List<Long> indices = stringToH3List(h3Addresses);
+    Set<Long> indices = stringToH3Set(h3Addresses);
 
     return cellsToMultiPolygon(indices, geoJson);
   }
 
   /** Create polygons from a set of contiguous indexes */
-  public List<List<List<LatLng>>> cellsToMultiPolygon(Collection<Long> h3, boolean geoJson) {
+  public List<List<List<LatLng>>> cellsToMultiPolygon(Set<Long> h3, boolean geoJson) {
     long[] h3AsArray = collectionToLongArray(h3);
 
     ArrayList<List<List<LatLng>>> result = new ArrayList<>();
@@ -1164,6 +1165,11 @@ public class H3Core {
    */
   public String childPosToCell(long childPos, String parentAddress, int childRes) {
     return h3ToString(childPosToCell(childPos, stringToH3(parentAddress), childRes));
+  }
+
+  /** Transforms a collection of H3 indexes in string form to a set of H3 indexes in long form. */
+  private Set<Long> stringToH3Set(Collection<String> collection) {
+    return collection.stream().map(this::stringToH3).collect(Collectors.toSet());
   }
 
   /** Transforms a collection of H3 indexes in string form to a list of H3 indexes in long form. */

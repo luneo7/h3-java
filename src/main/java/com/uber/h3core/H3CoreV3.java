@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * H3CoreV3 provides all functions of the H3 API with backwards compatible naming for the V3 API.
@@ -450,7 +451,7 @@ public class H3CoreV3 {
   }
 
   /** Create polygons from a set of contiguous indexes */
-  public List<List<List<LatLng>>> h3SetToMultiPolygon(Collection<Long> h3, boolean geoJson) {
+  public List<List<List<LatLng>>> h3SetToMultiPolygon(Set<Long> h3, boolean geoJson) {
     return h3Api.cellsToMultiPolygon(h3, geoJson);
   }
 

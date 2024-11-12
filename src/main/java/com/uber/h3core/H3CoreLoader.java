@@ -16,7 +16,6 @@
 package com.uber.h3core;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -72,7 +71,7 @@ public final class H3CoreLoader {
             String.format("No native resource found at %s", resourcePath));
       }
 
-      try (FileOutputStream outFile = new FileOutputStream(newH3LibFile)) {
+      try (OutputStream outFile = Files.newOutputStream(newH3LibFile.toPath())) {
         copyStream(resource, outFile);
       }
     }

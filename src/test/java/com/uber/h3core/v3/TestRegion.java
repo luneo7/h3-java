@@ -22,7 +22,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.uber.h3core.util.LatLng;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 /** Tests for region (polyfill, h3SetToMultiPolygon) functions. */
@@ -109,7 +111,7 @@ class TestRegion extends BaseTestH3CoreV3 {
 
   @Test
   void polyfillKnownHoles() {
-    List<Long> inputHexagons = h3.kRing(0x85283083fffffffL, 2);
+    Set<Long> inputHexagons = new HashSet<>(h3.kRing(0x85283083fffffffL, 2));
     inputHexagons.remove(0x8528308ffffffffL);
     inputHexagons.remove(0x85283097fffffffL);
     inputHexagons.remove(0x8528309bfffffffL);
@@ -125,7 +127,7 @@ class TestRegion extends BaseTestH3CoreV3 {
 
   @Test
   void h3SetToMultiPolygonEmpty() {
-    assertEquals(0, h3.h3SetToMultiPolygon(new ArrayList<Long>(), false).size());
+    assertEquals(0, h3.h3SetToMultiPolygon(new HashSet<>(), false).size());
   }
 
   @Test
@@ -133,8 +135,7 @@ class TestRegion extends BaseTestH3CoreV3 {
     long testIndex = 0x89283082837ffffL;
 
     List<LatLng> actualBounds = h3.h3ToGeoBoundary(testIndex);
-    List<List<List<LatLng>>> multiBounds =
-        h3.h3SetToMultiPolygon(ImmutableList.of(testIndex), true);
+    List<List<List<LatLng>>> multiBounds = h3.h3SetToMultiPolygon(ImmutableSet.of(testIndex), true);
 
     // This is tricky, because output in an order starting from any vertex
     // would also be correct, but that's difficult to assert and there's
@@ -160,7 +161,7 @@ class TestRegion extends BaseTestH3CoreV3 {
 
     List<LatLng> actualBounds = h3.h3ToGeoBoundary(testIndex);
     List<List<List<LatLng>>> multiBounds =
-        h3.h3SetToMultiPolygon(ImmutableList.of(testIndex), false);
+        h3.h3SetToMultiPolygon(ImmutableSet.of(testIndex), false);
 
     // This is tricky, because output in an order starting from any vertex
     // would also be correct, but that's difficult to assert and there's
@@ -190,7 +191,7 @@ class TestRegion extends BaseTestH3CoreV3 {
 
     // Note this is different than the h3core-js bindings, in that it uses GeoJSON (possible bug)
     List<List<List<LatLng>>> multiBounds =
-        h3.h3SetToMultiPolygon(ImmutableList.of(testIndex, testIndex2), false);
+        h3.h3SetToMultiPolygon(ImmutableSet.of(testIndex, testIndex2), false);
 
     assertEquals(1, multiBounds.size());
     assertEquals(1, multiBounds.get(0).size());
@@ -224,7 +225,7 @@ class TestRegion extends BaseTestH3CoreV3 {
     long testIndex2 = 0x8928308280fffffL;
 
     List<List<List<LatLng>>> multiBounds =
-        h3.h3SetToMultiPolygon(ImmutableList.of(testIndex, testIndex2), false);
+        h3.h3SetToMultiPolygon(ImmutableSet.of(testIndex, testIndex2), false);
 
     assertEquals(2, multiBounds.size());
     assertEquals(1, multiBounds.get(0).size());
