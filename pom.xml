@@ -64,6 +64,7 @@
     </distributionManagement>
 
     <properties>
+        <not.used>not</not.used>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.openjdk.jmh.version>1.19</org.openjdk.jmh.version>
         <maven.javadoc.plugin.version>3.1.1</maven.javadoc.plugin.version>
